@@ -6,6 +6,14 @@
 \usepackage{multirow}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
 % \usepackage[a4paper, portrait, margin=1in]{geometry}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -23,7 +31,6 @@
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
-    keepspaces=true,                 
     numbers=left,                    
     numbersep=5pt,                  
     showspaces=false,                
@@ -87,18 +94,46 @@
         \textbf{Langkah-langkah}
 
         \begin{enumerate}
+            \item Mendapatkan Access Token dan Comsumer Key pada halaman Portal Developer Twitter \href{https://developer.x.com/en/portal/}{https://developer.x.com/en/portal/}
             \item Menginstall library tweepy
             \lstset{style=bashstyle}
             \begin{lstlisting}[language=bash]
 pip install tweepy
             \end{lstlisting}
 
-            \item Membuat script python untuk mengumpulkan data
+            \item Import library yang dibutuhkan
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 import tweepy
 import numpy as np
+import tweepy
+import json
+import pandas as pd
+from tweepy import OAuthHandler
+            \end{lstlisting}
 
+            \item Memasukkan Access Token dan Comsumer Key dan Kredensial lainnya
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+consumer_key = 'your_consumer_key'
+consumer_secret = 'your_consumer_secret'
+access_token = 'your_access_token'
+access_token_secret = 'your_access_token_secret'
+            \end{lstlisting}
+
+            \item Membuat koneksi ke API Twitter
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+            \end{lstlisting}
+
+            \item Membuat query untuk mengambil data
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+query = 'covid-19'
+Tweets = api.search(query, count = 10,lang='en', exclude='retweets',tweet_mode='extended')
             \end{lstlisting}
         \end{enumerate}
     \end{flushleft}
