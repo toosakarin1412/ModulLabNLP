@@ -6,6 +6,14 @@
 \usepackage{multirow}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
 % \usepackage[a4paper, portrait, margin=1in]{geometry}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -14,6 +22,7 @@
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
@@ -22,7 +31,6 @@
     breakatwhitespace=false,
     breaklines=true,
     captionpos=b,
-    keepspaces=true,
     numbers=left,
     numbersep=5pt,
     showspaces=false,
@@ -31,7 +39,21 @@
     tabsize=2
 }
 
-\lstset{style=pythonstyle}
+\lstdefinestyle{bashstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
 
 \pagestyle{fancy}
 \fancyhf{}

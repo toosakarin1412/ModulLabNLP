@@ -6,6 +6,14 @@
 \usepackage{multirow}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
 % \usepackage[a4paper, portrait, margin=1in]{geometry}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -23,7 +31,6 @@
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
-    keepspaces=true,                 
     numbers=left,                    
     numbersep=5pt,                  
     showspaces=false,                
@@ -66,13 +73,12 @@
     \end{center}
 
     \section*{Deskripsi Singkat}
-    Deskripsi
+    Modul ini akan membahas pengenalan pengolahan data teks menggunakan bahasa Python. Modul ini terdiri dari 5 materi yang akan membahas pengumpulan data menggunakan API, membaca data dari berbagai format file yang ada seperti PDF, Word, JSON, dan HTML.
 
     \section*{Tujuan}
     \begin{enumerate}
-        \item Tujuan
-        \item Tujuan
-        \item Tujuan
+        \item Dapat mengumpulkan data menggunakan melalui API yang tersedia di internet
+        \item Dapat membaca data dari berbagai format file yang ada
     \end{enumerate}
 
     \begin{flushleft}
@@ -87,18 +93,46 @@
         \textbf{Langkah-langkah}
 
         \begin{enumerate}
+            \item Mendapatkan Access Token dan Comsumer Key pada halaman Portal Developer Twitter \href{https://developer.x.com/en/portal/}{https://developer.x.com/en/portal/}
             \item Menginstall library tweepy
             \lstset{style=bashstyle}
             \begin{lstlisting}[language=bash]
 pip install tweepy
             \end{lstlisting}
 
-            \item Membuat script python untuk mengumpulkan data
+            \item Import library yang dibutuhkan
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 import tweepy
 import numpy as np
+import tweepy
+import json
+import pandas as pd
+from tweepy import OAuthHandler
+            \end{lstlisting}
 
+            \item Memasukkan Access Token dan Comsumer Key dan Kredensial lainnya
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+consumer_key = 'your_consumer_key'
+consumer_secret = 'your_consumer_secret'
+access_token = 'your_access_token'
+access_token_secret = 'your_access_token_secret'
+            \end{lstlisting}
+
+            \item Membuat koneksi ke API Twitter
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+            \end{lstlisting}
+
+            \item Membuat query untuk mengambil data
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+query = 'covid-19'
+Tweets = api.search(query, count = 10,lang='en', exclude='retweets',tweet_mode='extended')
             \end{lstlisting}
         \end{enumerate}
     \end{flushleft}
@@ -107,44 +141,187 @@ import numpy as np
         \textbf{Materi 2 - Membaca data dari PDF}
         \newline
 
-        Seringkali data kita disimpan dalam format PDF, dan untuk keperluan analisis lebih 
-        lanjut dalam pemrosesan bahasa alami, kita perlu mengekstrak teks dari file tersebut. \newline
+        \textbf{Studi Kasus}
+        \newline
+        Anda ingin membaca data dari file PDF
+        \newline
 
-        Teks yang diambil dari file PDF ini dapat digunakan untuk berbagai aplikasi dalam 
-        NLP, seperti analisis sentimen, ekstraksi informasi, atau pengenalan entitas. 
-        Dengan menggunakan pustaka Python seperti PyPDF2, kita bisa dengan mudah mengakses 
-        dan menyiapkan teks dari dokumen PDF untuk proses analisis lebih lanjut. \newline
+        \textbf{Langkah-langkah}
 
-        \lstset{style=pythonstyle}
-            \begin{lstlisting}[language=python]
-import tweepy
-import numpy as np
-
+        \begin{enumerate}
+            \item Menginstall library PyPDF2
+            \lstset{style=bashstyle}
+            \begin{lstlisting}[language=bash]
+pip install PyPDF2
             \end{lstlisting}
-        \lstset{style=pythonstyle}
 
+            \item Import library yang dibutuhkan
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+import PyPDF2
+from PyPDF2 import PdfFileReader
+            \end{lstlisting}
 
+            \item Membaca file PDF
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+# Membuka file PDF
+pdf = open("file.pdf","rb")
+
+# Membaca file PDF
+pdf_reader = PyPDF2.PdfFileReader(pdf)
+
+# Mendapatkan jumlah halaman
+print(pdf_reader.numPages)
+
+# Membaca data halaman
+page = pdf_reader.getPage(0)
+
+# Mencetak isi halaman
+print(page.extractText())
+
+# Menutup file PDF
+pdf.close()
+            \end{lstlisting}
+        \end{enumerate}
     \end{flushleft}
 
     \begin{flushleft}
         \textbf{Materi 3 - Membaca data dari File Word (Microsoft Word)}
         \newline
 
-        Isi materi 3
+        \textbf{Studi Kasus}
+        \newline
+        Anda ingin membaca data dari file Word
+        \newline
+
+        \textbf{Langkah-langkah}
+
+        \begin{enumerate}
+            \item Menginstall library python-docx
+            \lstset{style=bashstyle}
+            \begin{lstlisting}[language=bash]
+pip install docx
+            \end{lstlisting}
+
+            \item Import library yang dibutuhkan
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+from docx import Document
+            \end{lstlisting}
+
+            \item Membaca text dari file Word
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+# Membuka file Word
+doc = Document("file.docx")
+
+# Membaca text dari file Word
+document = docx.Document("file.docx")
+
+text = ""
+
+for para in document.paragraphs:
+    docu += para.text
+
+# Cetak hasil text dari file Word
+print(docu)
+            \end{lstlisting}
+
+        \end{enumerate}
     \end{flushleft}
 
     \begin{flushleft}
         \textbf{Materi 4 - Membaca data dari JSON}
         \newline
 
-        Isi materi 4
+        \textbf{Studi Kasus}
+        \newline
+        Anda ingin membaca data dari file JSON dengan fetch data dari API
+        \newline
+
+        \textbf{Langkah-langkah}
+
+        \begin{enumerate}
+            \item Import library yang dibutuhkan
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+import requests
+import json
+            \end{lstlisting}
+
+            \item Melakukan fetch data dari API
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+# Fetch data dari API
+r = requests.get("https://jsonplaceholder.typicode.com/todos")
+res = r.json()
+
+# Cetak hasil fetch data dari API
+print(res)
+            \end{lstlisting}
+
+            \item Melakukan ekstraksi data dari JSON
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+#extract contents
+q = res['contents']['quotes'][0]
+print(q)
+            \end{lstlisting}
+        \end{enumerate}
     \end{flushleft}
 
     \begin{flushleft}
         \textbf{Materi 5 - Membaca data dari HTML}
         \newline
 
-        Isi materi 3
+        \textbf{Studi Kasus}
+        \newline
+        Anda ingin membaca data dari file HTML
+        \newline
+
+        \textbf{Langkah-langkah}
+
+        \begin{enumerate}
+            \item Menginstall library BeautifulSoup
+            \lstset{style=bashstyle}
+            \begin{lstlisting}[language=bash]
+pip install beautifulsoup4
+            \end{lstlisting}
+
+            \item Import library yang dibutuhkan
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+from bs4 import BeautifulSoup   
+import urllib.request as urllib2
+            \end{lstlisting}
+
+            \item Mengambil file HTML melalui URL
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+response = urllib2.urlopen('https://en.wikipedia.org/wiki/Natural_language_processing')
+html_doc = response.read()
+            \end{lstlisting}
+
+            \item Melakukan parsing file HTML
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+#Parsing
+soup = BeautifulSoup(html_doc, 'html.parser')
+# Formating the parsed html file
+strhtm = soup.prettify()
+
+# Mengambil data
+print(soup.title)
+print(soup.title.string)
+print(soup.a.string)
+print(soup.b.string)
+
+# Mengambil semua tag tertentu
+for x in soup.find_all('a'): print(x.string)
+            \end{lstlisting}
+        \end{enumerate}
+        
     \end{flushleft}
 
     \newpage
