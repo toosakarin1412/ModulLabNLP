@@ -78,7 +78,7 @@
     \section*{Tujuan}
     \begin{enumerate}
         \item Dapat mengumpulkan data menggunakan melalui API yang tersedia di internet
-        \item Dapat membaca data dari berbagai format file yang ada
+        \item Dapat membaca data dari berbagai format file yang ada seperti PDF, Word, JSON, dan HTML
     \end{enumerate}
 
     \begin{flushleft}
@@ -93,7 +93,7 @@
         \textbf{Langkah-langkah}
 
         \begin{enumerate}
-            \item Mendapatkan Access Token dan Comsumer Key pada halaman Portal Developer Twitter \href{https://developer.x.com/en/portal/}{https://developer.x.com/en/portal/}
+            \item Mendapatkan Bearer Token pada halaman Portal Developer Twitter \href{https://developer.x.com/en/portal/}{https://developer.x.com/en/portal/}
             \item Menginstall library tweepy
             \lstset{style=bashstyle}
             \begin{lstlisting}[language=bash]
@@ -104,35 +104,28 @@ pip install tweepy
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 import tweepy
-import numpy as np
-import tweepy
-import json
-import pandas as pd
-from tweepy import OAuthHandler
             \end{lstlisting}
 
-            \item Memasukkan Access Token dan Comsumer Key dan Kredensial lainnya
+            \item Memasukkan bearer token sebagai akses token ke API Twitter
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
-consumer_key = 'your_consumer_key'
-consumer_secret = 'your_consumer_secret'
-access_token = 'your_access_token'
-access_token_secret = 'your_access_token_secret'
+consumer_key = "your_consumer_key"
+consumer_secret = "your_consumer_secret"
+access_token = "your_access_token"
+access_token_secret = "your_access_token_secret"
+bearer_token = 'your_bearer_token'
             \end{lstlisting}
 
-            \item Membuat koneksi ke API Twitter
+            \item Membuat client ke API Twitter
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
-            \end{lstlisting}
+client = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key, consumer_secret=consumer_secret, access_token=access_token, access_token_secret=access_token_secret)            \end{lstlisting}
 
-            \item Membuat query untuk mengambil data
+            \item Membuat query untuk mengambil data tweet berdasarkan kata kunci
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 query = 'covid-19'
-Tweets = api.search(query, count = 10,lang='en', exclude='retweets',tweet_mode='extended')
+result = client.search_recent_tweets(query=query, max_results=20)
             \end{lstlisting}
         \end{enumerate}
     \end{flushleft}
@@ -159,7 +152,7 @@ pip install PyPDF2
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 import PyPDF2
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
             \end{lstlisting}
 
             \item Membaca file PDF
@@ -174,11 +167,11 @@ pdf_reader = PyPDF2.PdfReader(pdf)
 # Mengecek jumlah halaman dalam file PDF
 print(pdf_reader.pages)
 
-# Membuat objek halaman
+# Mendapatkan object sebuah halaman
 page = pdf_reader.pages[0]
 
 # Mengekstrak teks dari halaman
-print(page.extract_text)
+print(page.extract_text())
 
 # Menutup file PDF setelah selesai
 pdf.close()
@@ -201,33 +194,30 @@ pdf.close()
             \item Menginstall library python-docx
             \lstset{style=bashstyle}
             \begin{lstlisting}[language=bash]
-pip install docx
+pip install docx # Library untuk python versi lama
+pip install python-docx # Library terbaru
             \end{lstlisting}
 
             \item Import library yang dibutuhkan
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
-from docx import Document
+import docx
             \end{lstlisting}
 
             \item Membaca text dari file Word
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
-# Membuka file Word
-doc = Document("file.docx")
-
 # Membaca text dari file Word
 document = docx.Document("file.docx")
 
 text = ""
 
 for para in document.paragraphs:
-    docu += para.text
+    text += para.text
 
 # Cetak hasil text dari file Word
-print(docu)
+print(text)
             \end{lstlisting}
-
         \end{enumerate}
     \end{flushleft}
 
@@ -265,8 +255,28 @@ print(res)
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 #extract contents
-q = res['contents']['quotes'][0]
-print(q)
+content = res[0]['title']
+print(content)
+            \end{lstlisting}
+        \end{enumerate}
+
+        atau jika data yang ingin diambil berada di dalam file JSON
+
+        \begin{enumerate}
+            \item Membaca data dari file JSON
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+# Membaca data dari file JSON
+with open('data.json') as f:
+    data = json.load(f)
+            \end{lstlisting}
+
+            \item Melakukan ekstraksi data dari JSON
+            \lstset{style=pythonstyle}
+            \begin{lstlisting}[language=python]
+#extract contents
+content = data[0]['title']
+print(content)
             \end{lstlisting}
         \end{enumerate}
     \end{flushleft}
@@ -330,7 +340,8 @@ for x in soup.find_all('a'): print(x.string)
         \newline
 
         \begin{enumerate}
-            \item Kerjakan semua materi 1 - 5 diatas
+            \item Buatlah program yang dapat mengambil data dari file PDF, Word, JSON, dan HTML
+            \item Buatlah program yang dapat mengambil data dari API Twitter
         \end{enumerate}
     \end{flushleft}
 \end{document}
