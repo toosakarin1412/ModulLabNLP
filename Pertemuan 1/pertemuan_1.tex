@@ -166,21 +166,21 @@ from PyPDF2 import PdfFileReader
             \lstset{style=pythonstyle}
             \begin{lstlisting}[language=python]
 # Membuka file PDF
-pdf = open("file.pdf","rb")
+pdf = open("pertemuan_1.pdf", "rb")
 
-# Membaca file PDF
-pdf_reader = PyPDF2.PdfFileReader(pdf)
+# Membuat objek pembaca PDF
+pdf_reader = PyPDF2.PdfReader(pdf)
 
-# Mendapatkan jumlah halaman
-print(pdf_reader.numPages)
+# Mengecek jumlah halaman dalam file PDF
+print(pdf_reader.pages)
 
-# Membaca data halaman
-page = pdf_reader.getPage(0)
+# Membuat objek halaman
+page = pdf_reader.pages[0]
 
-# Mencetak isi halaman
-print(page.extractText())
+# Mengekstrak teks dari halaman
+print(page.extract_text)
 
-# Menutup file PDF
+# Menutup file PDF setelah selesai
 pdf.close()
             \end{lstlisting}
         \end{enumerate}
