@@ -1,0 +1,552 @@
+% chktex-file 44
+
+\documentclass{article}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\graphicspath{ {./img/} }
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\usepackage{adjustbox}
+\usepackage{longtable}
+\usepackage{tabularx}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+% \usepackage[a4paper, portrait, margin=1in]{geometry}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstdefinestyle{bashstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Modul 2 Praktikum Natural Language Processing}
+\rfoot{\footnotesize Page \thepage}
+\lfoot{\footnotesize Prof.\@ Dr.\@ Taufik Fuadi Abidin, S.Si., M. Tech\@. \newline Jurusan Informatika Universitas Syiah Kuala \newline Modul oleh: Diky Wahyudi, Furqan Al Ghifari Zulva}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\titleformat*{\section}{\small\bfseries}
+\titleformat*{\subsection}{\small\bfseries}
+
+\begin{document}
+    \begin{center}
+        \textbf{Modul 2 Praktikum Natural Language Processing}
+
+        \textbf{Preprocessing Data Teks mengunakan NLTK}
+    \end{center}
+
+    \section*{Deskripsi Singkat}
+    Modul ini membahas tentang preprocessing data teks menggunakan Natural Language Toolkit (NLTK). 
+    Dalam modul ini, peserta akan mempelajari cara menggunakan regex untuk parsing teks, teknik-teknik penanganan string, dan berbagai metode untuk mengeksplorasi serta memproses data teks sebelum digunakan dalam analisis lebih lanjut.
+
+    \section*{Tujuan}
+    \begin{enumerate}
+        \item Memahami konsep dasar preprocessing data teks.
+        \item Menggunakan regex untuk parsing teks.
+        \item Menerapkan teknik-teknik penanganan string.
+        \item Mengeksplorasi dan memproses data teks menggunakan NLTK\@.
+        \item Menyiapkan data teks untuk analisis lebih lanjut.
+    \end{enumerate}
+
+    \section*{Materi 1 \@- Parsing teks menggunakan regex}
+    
+    RegEx (Regular Expressions) yaitu sekumpulan karakter yang membentuk pola pencarian.
+    Regex sangat berguna dalam berbagai pemrosesan teks, seperti validasi input, pencarian dan penggantian teks, serta ekstraksi informasi dari teks.
+
+    \begin{longtable}[c]{p{2cm}|p{8cm}}
+        \hline
+        \textbf{Regex} & \textbf{Deskripsi} \\
+        \hline
+        
+        \texttt{[ab]} & Mencocokkan karakter a dan b \\
+        \texttt{\textasciicircum ab} & Mencocokkan karakter dari a sampai d \\
+        \texttt{[a-z]} & Mencocokkan karakter dari a sampai z \\
+        \texttt{[A-Z]} & Mencocokkan karakter dari A sampai Z \\
+        \texttt{[0\@-9]} & Mencocokkan karakter dari 0 sampai 9 \\
+        \texttt{$\backslash$s} & Mencocokkan spasi \\
+        \texttt{$\backslash$S} & Mencocokkan karakter bukan spasi \\
+        \texttt{$\backslash$d} & Mencocokkan digit \\
+        \texttt{$\backslash$D} & Mencocokkan karakter bukan digit \\
+        \texttt{$\backslash$w} & Mencocokkan kata \\
+        \texttt{$\backslash$W} & Mencocokkan selain kata \\
+        \texttt{+} & Mencocokkan satu atau lebih karakter \\
+        \texttt{*} & Mencocokkan nol atau lebih karakter \\
+        \texttt{?} & Mencocokkan nol atau satu karakter \\
+        \hline
+    \end{longtable}
+
+    \begin{flushleft}
+        Untuk simbol-simbol lainnya, silahkan kunjungi \\
+    \href{https://www.w3schools.com/python/python\_regex.asp}{https://www.w3schools.com/python/python\_regex.asp}.
+    \end{flushleft}
+
+    \subsection*{Mengambil email dari sebuah text}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import re
+
+doc = "Informasi lebih lanjut hubungi: xyz@abc.com, pqr@mno.com"
+
+addresses = re.findall(r'[\w\.-]+@[\w\.-]+', doc)
+for address in addresses:
+    print(address)
+
+# Output:
+xyz@abc.com
+pqr@mno.com
+\end{lstlisting}
+
+    \begin{flushleft}
+        Berikut adalah penjelasan dari regex yang digunakan:
+        \begin{itemize}
+            \item \texttt{[\textbackslash w\textbackslash .-]+} : Mencocokkan satu atau lebih karakter alfanumerik, titik, atau strip.
+            \item \texttt{@} : Mencocokkan karakter @.
+            \item \texttt{[\textbackslash w\textbackslash .-]+} : Mencocokkan satu atau lebih karakter alfanumerik, titik, atau strip.
+        \end{itemize}
+    \end{flushleft}
+
+    \subsection*{Merubah email dari sebuah text}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import re
+
+doc = "Informasi lebih lanjut hubungi: xyz@abc.com"
+
+email_baru = re.sub(r'([\w\.-]+)@([\w\.-]+)', r'pqr@mno.com', doc)
+print(email_baru)
+
+# Output
+Informasi lebih lanjut hubungi: pqr@mno.com
+    \end{lstlisting}
+
+    \begin{flushleft}
+        Function \texttt{re.sub()} digunakan untuk mengganti teks yang cocok dengan pola tertentu dengan teks lain.
+    \end{flushleft}
+
+    \subsection*{Melakukan tokenisasi teks menggunakan regex}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import re
+
+doc = "Saya sedang belajar NLP."
+
+token = re.split(r'\s+', doc)
+
+# Output:
+['Saya', 'sedang', 'belajar', 'NLP.']
+    \end{lstlisting}
+
+    \begin{flushleft}
+        Berikut adalah penjelasan dari regex yang digunakan:
+        \begin{itemize}
+            \item \texttt{\textbackslash s+} \@: Mencocokkan satu atau lebih spasi.
+        \end{itemize}
+    \end{flushleft}
+
+    \subsection*{Latihan I Preprocessing Data Teks}
+
+    \begin{flushleft}
+        Pada latihan ini akan menggunakan dataset dari sebuah project yang bermana GUTENBERG EBOOK\@. 
+        Dataset ini berisi teks dari buku-buku yang sudah di public domain.
+        \newline
+
+        Pada latihan ini akan menggunakan dataset berikut: \\
+        \href{https://www.gutenberg.org/files/2638/2638-0.txt}{https://www.gutenberg.org/files/2638/2638-0.txt}
+        \newline
+
+        Jalankan kode berikut untuk mendownload dataset tersebut:
+    \end{flushleft}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import re
+import requests
+
+def get_gutenberg_book():
+    url = 'https://www.gutenberg.org/files/2638/2638-0.txt'
+
+    raw = requests.get(url).text
+
+    start = re.search(r"\*\*\* START OF THE PROJECT GUTENBERG EBOOK THE IDIOT \*\*\*", raw).end()
+    stop = re.search(r"II", raw).start()
+    
+    text = raw[start:stop]
+
+    return text
+
+book = get_gutenberg_book()
+print(book)
+    \end{lstlisting}
+
+    \begin{flushleft}
+        Selanjutnya adalah mengambil semua kata yang ada pada teks tersebut dan merubahnya menjadi huruf kecil.
+    \end{flushleft}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+clean_book = re.sub('[^A-Za-z0-9.]+' , ' ', sentence).lower()
+print(clean_book)
+    \end{lstlisting}
+
+    \begin{flushleft}
+        Selanjutnya adalah mencoba untuk menghitung jumlah kata \@'the\@' yang ada pada teks tersebut.
+    \end{flushleft}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+count_the = len(re.findall(r'the', clean_book))
+print(count_the)
+    \end{lstlisting}
+
+    \section*{Materi 2 \@- Handling String pada Python}
+
+    Teknik Preprocessing Data Teks yang kedua adalah Handling String menggunakan Python.
+    Python memiliki berbagai fungsi bawaan yang dapat digunakan untuk melakukan manipulasi string.
+
+    \subsection*{Menggabungkan String}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+s1 = "Hello"
+s2 = "World"
+s3 = s1 + s2
+
+# Output
+HelloWorld
+    \end{lstlisting}
+
+    \subsection*{Mencari sebuah substring dalam sebuah string}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+s = "I am learning NLP"
+print(s.find("learn"))
+
+# Output
+5
+    \end{lstlisting}
+
+    \subsection*{Mengganti sebuah substring dalam sebuah string}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+s = "I am learning NLP"
+print(s.replace("NLP", "Natural Language Processing"))
+
+# Output
+I am learning Natural Language Processing
+    \end{lstlisting}
+
+    \subsection*{Slice String}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+String_v1 = "I am exploring NLP"
+print(String_v1[5:14]) # Memotong string dari index 5 - 14
+# Output
+exploring
+
+print(String_v1[:5]) # Memotong string dari index 0 - 5
+# Output
+I am
+
+print(String_v1[5:]) # Memotong string dari index 5 sampai akhir
+# Output
+exploring NLP
+
+print(String_v1[-3:]) # Memotong string dari index 3 dari akhir
+# Output
+NLP
+
+print(String_v1[:-3]) # Memotong string dari index 0-3 dari akhir
+# Output
+I am exploring
+    \end{lstlisting}
+
+    \begin{flushleft}
+        Untuk lebih lengkapnya, silahkan kunjungi \\
+    \href{https://www.programiz.com/python-programming/methods/string}{https://www.programiz.com/python-programming/methods/string}.
+    \end{flushleft}
+
+    \section*{Materi 3 \@- Ekplorasi dan Preprocessing Data Teks}
+
+    Pada meteri ini akan membahas tentang cara melakukan ekplorasi dan preprocessing data teks menggunakan NLTK dan Pandas.
+    Sebelum mengikuti materi ini, pastikan sudah menginstall NLTK dan Pandas.
+
+    \subsection*{Menginstall NLTK dan Pandas}
+
+    \begin{lstlisting}[language=bash, style=bashstyle]
+pip install nltk
+pip install pandas
+    \end{lstlisting}
+
+    \subsection*{Membaca Data Teks dan Menjadikan DataFrame}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import pandas as pd
+
+text=[
+    'This is introduction to NLP',
+    'It is likely to be useful, to people ',
+    'Machine learning is the new electrcity', 
+    'R is good langauage', 
+    'I like this book',
+    'I want more books like this']
+
+df = pd.DataFrame({'tweet': text})   
+print(df)
+    \end{lstlisting}
+
+    DataFrame adalah struktur data dua dimensi yang terdiri dari baris dan kolom yang dapat digunakan untuk menyimpan data dalam bentuk tabel. 
+    Perintah \textbf{pd.DataFrame()} digunakan untuk membuat DataFrame dari data yang diberikan.
+    Silahkan jalankan kode diatas dan perhatikan outputnya.
+
+    \subsection*{Menhapus semua tanda baca yang ada pada teks}
+
+    Dalam preprocessing data teks, seringkali kita perlu menghapus tanda baca yang ada pada teks.
+    Penghapusan ini agar tanda baca tidak mempengaruhi analisis yang akan dilakukan.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Contoh
+s = "I. like. This book!"
+s1 = re.sub(r'[^\w\s]','',s)
+print(s1) # 'I like This book'
+
+# atau bisa dengan menggunakan perulangan
+import string
+
+s = "I. like. This book!"
+
+for c in string.punctuation:
+    s = s.replace(c, "")
+
+print(s) # 'I like This book'
+    \end{lstlisting}
+
+    Selanjutnya ubahlah hilangkan semua tanda baca pada teks yang ada pada DataFrame yang sudah dibuat sebelumnya.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+df['tweet'] = df['tweet'].str.replace('r[^\w\s]','')
+print(df['tweet'])
+    \end{lstlisting}
+
+    \subsection*{Menghapus Stopwords}
+
+    Stopwords adalah kata-kata yang sering muncul dalam teks dan tidak memiliki makna yang signifikan seperti \@'the', \@'is', \@'and' dan lain-lain atau dalam bahasa Indonesia seperti \@'adalah', \@'aku', \@'apa' dan lain-lain.
+    Sebelum itu silahkan install library NLTK dengan menjalankan perintah berikut untuk mengunduh stopwords yang ada pada NLTK\@.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import nltk
+nltk.download('stopwords')
+    \end{lstlisting}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Sebelum menghapus stopword, ubahlah teks menjadi huruf kecil
+
+df['tweet'] = df['tweet'].apply(lambda x: " ".join(x.lower() for x in x.split()))
+
+from nltk.corpus import stopwords
+
+stopword = stopwords.words('english')
+df['tweet'] = df['tweet'].apply(lambda x: " ".join(x for x in x.split() if x not in stop))
+print(df['tweet'])
+    \end{lstlisting}
+
+    \subsection*{Standardisasi teks}
+
+    Standardisasi teks adalah proses mengubah teks menjadi format yang seragam.
+    Misalnya merubah kata-kata yang disingkat menjadi kata lengkap atau kata yang benar.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Buatlah sebuah dictionary yang berisi kata-kata yang akan diubah
+lookup_dict = {
+    'nlp': 'natural language processing', 
+    "u": "you", 
+    'r': 'are', 
+    'd': 'the', 
+    'ur': 'your'}
+
+def text_std(input_text):
+    words = input_text.split()
+    new_words = []
+    for word in words:
+        word = re.sub(r'[^\w\s]','',word)
+        if word.lower() in lookup_dict:
+            word = lookup_dict[word.lower()]
+            new_words.append(word)
+            new_text = " ".join(new_words)
+    return new_text
+
+print(text_std("I like nlp"))
+
+# Output
+natural language processing
+    \end{lstlisting}
+
+    \subsection*{Spelling Correction (Perbaikan Ejaan)}
+    
+    Spelling correction adalah proses untuk memperbaiki kata-kata yang salah pada pengejaannya.
+    Salah satu library yang dapat digunakan untuk spelling correction adalah \textbf{TextBlob} ataupun \textbf{autocorrect}.
+    Untuk menggunakan TextBlob dan autocorrect, silahkan install library tersebut dengan menjalankan perintah berikut:
+
+    \begin{lstlisting}[language=bash, style=bashstyle]
+pip install textblob
+pip install autocorrect
+    \end{lstlisting}    
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Menggunakan TextBlob
+from textblob import TextBlob
+
+text = "Machine learning is the new electrcity"
+new_text = TextBlob(text).correct()
+
+print(new_text) # Output: Machine learning is the new electricity
+
+# Menggunakan autocorrect
+from autocorrect import Speller
+spell = Speller(lang='en')
+
+text = "Machine learning is the new electrcity"
+new_text = spell(text)
+
+print(new_text) # Output: Machine learning is the new electricity
+    \end{lstlisting}
+
+    Pada contoh diatas, kita menggunakan TextBlob dan autocorrect untuk melakukan spelling correction pada teks yang diberikan.
+    TextBlob akan mengubah kata \@'electrcity' menjadi \@'electricity' karena kata tersebut salah dalam pengejaannya.
+    Selanjutnya lakukan spelling correction pada teks yang ada pada DataFrame yang sudah dibuat sebelumnya.
+    
+    \begin{lstlisting}[language=python, style=pythonstyle]
+df['tweet'].apply(lambda x: str(TextBlob(x).correct()))
+    \end{lstlisting}
+
+    \subsection*{Tokenisasi}
+
+    Tokenisasi adalah proses memecah teks menjadi bagian-bagian yang lebih kecil yang disebut dengan token.
+    Tokenisasi dapat dilakukan dengan menggunakan TextBlob , NLTK\@ atau menggunakan fungsi split() pada Python.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Menggunakan TextBlob
+from textblob import TextBlob
+
+text = "Machine learning is the new electrcity"
+new_text = TextBlob(text).words
+
+print(new_text) # Output: ['Machine', 'learning', 'is', 'the', 'new', 'electricity']
+    \end{lstlisting}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Menggunakan NLTK
+from nltk.tokenize import word_tokenize
+
+text = "Machine learning is the new electrcity"
+new_text = word_tokenize(text)
+
+print(new_text) # Output: ['Machine', 'learning', 'is', 'the', 'new', 'electricity']
+    \end{lstlisting}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Menggunakan split()
+text = "Machine learning is the new electrcity"
+
+new_text = text.split()
+print(new_text) # Output: ['Machine', 'learning', 'is', 'the', 'new', 'electricity']
+    \end{lstlisting}
+
+    \subsection*{Stemming}
+
+    Stemming adalah proses menghilangkan imbuhan pada kata untuk mendapatkan kata dasar.
+    NLTK memiliki library yang dapat digunakan untuk melakukan stemming yaitu PorterStemmer.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+from nltk.stem import PorterStemmer
+
+stemmer = PorterStemmer()
+
+text = "There are many fishes in pound"
+new_text = " ".join([stemmer.stem(word) for word in text.split()])
+print(new_text) # Output: there are mani fish in pound
+    \end{lstlisting}
+
+    Untuk melakukan stemming pada bahasa Indonesia, kita dapat menggunakan library Sastrawi.
+    Penggunaan PySastraawi nanti akan dibahas pada pertemuan selanjutnya.
+
+    \subsection*{Lemmatization}
+
+    Lemmatization adalah proses mengubah kata-kata yang ada pada teks menjadi kata dasar.
+    Lemmatization lebih kompleks dibandingkan dengan stemming karena lemmatization memperhitungkan konteks kata dalam kalimat.
+    Contoh lemmatization adalah kata \@'leaves' akan diubah menjadi \@'leaf' karena kata \@'leaf' adalah kata dasar dari kata \@'leaves'.
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+import nltk
+nltk.download('wordnet')
+    \end{lstlisting}
+
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Lemmatization menggunakan TextBlob
+from textblob import Word
+
+text = "leaves and leaf"
+new_text = " ".join([Word(word).lemmatize() for word in text.split()])
+print(new_text) # Output: leaf and leaf
+    \end{lstlisting}
+    
+    \begin{lstlisting}[language=python, style=pythonstyle]
+# Lemmatization menggunakan NLTK
+from nltk.stem import WordNetLemmatizer
+
+lemmatizer = WordNetLemmatizer()
+
+text = "leaves and leaf"
+new_text = " ".join([lemmatizer.lemmatize(word) for word in text.split()])
+print(new_text) # Output: leaf and leaf
+    \end{lstlisting}
+
+    \newpage
+    \begin{flushleft}
+        \textbf{Tugas}
+        \newline
+
+        \begin{enumerate}
+            \item Kerjakan seluruh materi yang sudah dijelaskan pada modul diatas.
+        \end{enumerate}
+    \end{flushleft}
+\end{document}

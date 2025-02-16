@@ -1,0 +1,8 @@
+*
+build/
+!*.tex
+!*.ipynb
+!img/
+!img/*
+!*.pdf
+!.gitignore
